@@ -1,0 +1,32 @@
+{
+  "type": "panel",
+  "name": "Progress Chart",
+  "id": "grafana-progress-panel",
+
+  "info": {
+    "description": "Progress chart panel for grafana",
+    "author": {
+      "name": "James",
+      "url": ""
+    },
+    "keywords": ["progresschart", "panel"],
+    "logos": {
+      "small": "src/img/progresschart_logo_small.png",
+      "large": "src/img/progresschart_logo_large.png"
+    },
+    "links": [
+      {"name": "Project site", "url": ""},
+      {"name": "Blog Post", "url": ""},
+      {"name": "MIT License", "url": ""}
+    ],
+    "screenshots": [
+    ],
+    "version": "1.0.0",
+    "updated": "2018-03-01"
+  },
+
+  "dependencies": {
+    "grafanaVersion": "4.6",
+    "plugins": [ ]
+  }
+}

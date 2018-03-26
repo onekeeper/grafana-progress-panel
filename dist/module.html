@@ -1,0 +1,39 @@
+<div class="progress-panel small" ng-style="{height: ctrl.height}">
+    <div class="row">
+		<table class="custom-progress">
+			<tr ng-repeat="progress in ctrl.panel.progressArr" ng-if="progress.label">
+				<td class="text-left label-td" ng-bind="progress.label" title="{{progress.label}}"></td>
+				<td class="chart-td">
+					<div class="progress progress-big">
+						<div ng-class="{'dotted':progress.type=='dotted','progress-bar':progress.type=='solid'}"						
+						role="progressbar" aria-valuenow="{{progress.valueShow}}" aria-valuemin="0" aria-valuemax="100" 
+						style="width: {{progress.percent}}" title="{{progress.label}}">
+						{{progress.valueShow}}
+						</div>
+					</div>
+				</td>
+				<!--
+				<td class="value-td" title="{{progress.valueShow}}">{{progress.valueShow}}</td>
+				-->
+			</tr>
+			<tr ng-if="ctrl.panel.barsArr.length > 0">
+				<td colspan="3" class="bar-td">
+					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && bar.percent>0" class="bar-div" 
+					style="width:{{bar.percent}}%;background-color:{{ctrl.panel.colorArr[$index]}}" title="{{bar.label}}">				
+					    {{bar.valueShow}}
+					</div>	
+					<div style="clear:both"></div>
+					<div class="bar-shade"></div>
+                    <!--					
+					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && bar.percent>0" class="bar-div-staff" style="width:{{bar.percent}}%;color:{{ctrl.panel.colorArr[$index]}}">				
+						<div class="triangle-up" style="border-bottom-color:{{ctrl.panel.colorArr[$index]}}"></div>
+						<h5>{{bar.label}}</h5>
+					</div>
+					-->					
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+

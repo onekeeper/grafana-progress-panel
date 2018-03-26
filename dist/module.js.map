@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/module.js"],"names":["ProgressChartCtrl"],"mappings":";;;;;;;;AAAQA,uB,uBAAAA,iB;;;2BAGNA,iB","file":"module.js","sourcesContent":["import {ProgressChartCtrl} from './progresschart_ctrl';\n\nexport {\n  ProgressChartCtrl as PanelCtrl\n};\n\n"]}
