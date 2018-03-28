@@ -213,11 +213,11 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', './css/panel
 										if (perValue < 0) {
 											perValue = 0;
 										}
-										value.percent = perValue + '%';
+										value.percent = perValue;
 									} else {
 										value.value = 0;
 										value.valueShow = 'N/A';
-										value.percent = '0%';
+										value.percent = '0';
 									}
 								}
 							});
@@ -265,6 +265,11 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', './css/panel
 						this.series = dataList.map(this.seriesHandler.bind(this));
 						this.data = this.parseSeries(this.series);
 						this.render(this.data);
+					}
+				}, {
+					key: 'getProcessStyle',
+					value: function getProcessStyle(proObj) {
+						return { 'width': proObj.percent + '%' };
 					}
 				}, {
 					key: 'addProgress',

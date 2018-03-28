@@ -52,6 +52,8 @@
 	background: -moz-linear-gradient(left, #68d7fe, #557cc6);
 	background: -o-linear-gradient(left,#68d7fe, #557cc6);
 	background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#68d7fe), to(#557cc6));
+	background: -ms-linear-gradient(left, #68d7fe 0%,#557cc6 100%); 
+	background: linear-gradient(to right, #68d7fe 0%,#557cc6 100%); 
 }
 
 .dotted{

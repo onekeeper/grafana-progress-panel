@@ -138,11 +138,11 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 					 if(perValue < 0){
 						 perValue = 0;
 					 }
-					 value.percent = perValue+'%';
+					 value.percent = perValue;
 				 }else{
 					 value.value = 0;
 					 value.valueShow = 'N/A'
-					 value.percent = '0%';
+					 value.percent = '0';
 				 }
 			 }
 		});
@@ -188,6 +188,10 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
     this.series = dataList.map(this.seriesHandler.bind(this));
     this.data = this.parseSeries(this.series);
     this.render(this.data);
+  }
+  
+  getProcessStyle(proObj) {
+	 return {'width':proObj.percent+'%'};
   }
   
   addProgress() {
