@@ -66,8 +66,8 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 					 value.percent = perValue;
 				 }else{
 					 value.value = 0;
-					 value.valueShow = 'N/A'
-					 value.percent = '0';
+					 value.valueShow = 'N/A';
+					 value.percent = 0;
 				 }
 			 }
 		});
@@ -104,6 +104,16 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				 }
 			 }
 		})
+	}else{
+		this.panel.progressArr.forEach((value, index, arr) => {
+			 value.value = 0;
+			 value.valueShow = 'N/A';
+			 value.percent = 0;
+		})	
+		this.panel.barsArr.forEach((value, index, arr) => {
+			 value.value = 0;
+			 value.valueShow = 'N/A';	 
+		})	
 	}	
   }
   
