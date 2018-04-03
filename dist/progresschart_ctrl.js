@@ -138,7 +138,7 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 									} else {
 										value.value = 0;
 										value.valueShow = 'N/A';
-										value.percent = '0';
+										value.percent = 0;
 									}
 								}
 							});
@@ -174,6 +174,16 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 										value.percent = 0;
 									}
 								}
+							});
+						} else {
+							this.panel.progressArr.forEach(function (value, index, arr) {
+								value.value = 0;
+								value.valueShow = 'N/A';
+								value.percent = 0;
+							});
+							this.panel.barsArr.forEach(function (value, index, arr) {
+								value.value = 0;
+								value.valueShow = 'N/A';
 							});
 						}
 					}
