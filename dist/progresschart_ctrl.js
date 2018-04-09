@@ -81,6 +81,11 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 						barsArr: []
 					};
 
+					_this.dataTemp = {
+						progressArr: [],
+						barsArr: []
+					};
+
 					_.defaults(_this.panel, panelDefaults);
 
 					_this.events.on('render', _this.onRender.bind(_this));
@@ -118,15 +123,20 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 				}, {
 					key: 'parseSeries',
 					value: function parseSeries(series) {
+						var _this2 = this;
+
+						this.dataTemp = {
+							progressArr: unit.checkProgressArr(this.panel.progressArr, this.dataTemp.progressArr),
+							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr)
+						};
 						if (series && series.length > 0) {
 							series = unit.checkSeries(this.panel.targets, series);
-							var that = this;
-							this.panel.progressArr.forEach(function (value, index, arr) {
+							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								if (series[index] && series[index].datapoints) {
 									var datapoints = series[index].datapoints;
 									if (datapoints.length > 0) {
 										value.value = datapoints[datapoints.length - 1][0];
-										value.valueShow = unit.formatValue(that.panel, value.value, value.format);
+										value.valueShow = unit.formatValue(_this2.panel, value.value, _this2.panel.progressArr[index].format);
 										var perValue = datapoints[datapoints.length - 1][0];
 										if (perValue > 100) {
 											perValue = 100;
@@ -143,26 +153,26 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 								}
 							});
 
-							var total = 0;
-							var proLen = this.panel.progressArr.length;
-							var perTotal = 0;
-							for (var i = 0; i < this.panel.barsArr.length; i++) {
+							var total = 0,
+							    proLen = this.panel.progressArr.length,
+							    perTotal = 0;
+							for (var i = 0; i < this.dataTemp.barsArr.length; i++) {
 								var indTmp = proLen + i;
 								if (series[indTmp] && series[indTmp].datapoints) {
 									var datapoints = series[indTmp].datapoints;
 									if (datapoints.length > 0) {
-										this.panel.barsArr[i].value = datapoints[datapoints.length - 1][0];
-										total = Math.round(total) + Math.round(this.panel.barsArr[i].value);
-										this.panel.barsArr[i].valueShow = unit.formatValue(this.panel, this.panel.barsArr[i].value, this.panel.barsArr[i].format);
+										this.dataTemp.barsArr[i].value = datapoints[datapoints.length - 1][0];
+										total = Math.round(total) + Math.round(this.dataTemp.barsArr[i].value);
+										this.dataTemp.barsArr[i].valueShow = unit.formatValue(this.panel, this.dataTemp.barsArr[i].value, this.panel.barsArr[i].format);
 									} else {
-										this.panel.barsArr[i].value = 0;
-										this.panel.barsArr[i].valueShow = 'N/A';
+										this.dataTemp.barsArr[i].value = 0;
+										this.dataTemp.barsArr[i].valueShow = 'N/A';
 									}
 								} else {
-									total = Math.round(total) + Math.round(this.panel.barsArr[i].value);
+									total = Math.round(total) + Math.round(this.dataTemp.barsArr[i].value);
 								}
 							}
-							this.panel.barsArr.forEach(function (value, index, arr) {
+							this.dataTemp.barsArr.forEach(function (value, index, arr) {
 								if (index == arr.length - 1) {
 									value.percent = 100 - perTotal;
 								} else {
@@ -176,16 +186,18 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 								}
 							});
 						} else {
-							this.panel.progressArr.forEach(function (value, index, arr) {
+							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
 								value.valueShow = 'N/A';
 								value.percent = 0;
 							});
-							this.panel.barsArr.forEach(function (value, index, arr) {
+							this.dataTemp.barsArr.forEach(function (value, index, arr) {
 								value.value = 0;
+								value.percent = index == 0 ? 100 : 0;
 								value.valueShow = 'N/A';
 							});
 						}
+						return this.dataTemp;
 					}
 				}, {
 					key: 'seriesHandler',
@@ -202,40 +214,57 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 				}, {
 					key: 'getProcessStyle',
 					value: function getProcessStyle(proObj) {
-						return { 'width': proObj.percent + '%' };
+						return { 'width': proObj && proObj.percent ? proObj.percent + "%" : 0 + '%' };
+					}
+				}, {
+					key: 'getBarStyle',
+					value: function getBarStyle(index) {
+						return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
 					}
 				}, {
 					key: 'addProgress',
 					value: function addProgress() {
-						var objTemp = {
-							label: '', unit: '', type: 'solid', value: 0, percent: '0%', format: 'short'
-						};
-						this.panel.progressArr.push(objTemp);
+						var objTempEdit = {
+							label: '', unit: '', type: 'solid', format: 'short'
+						},
+						    objTemp = { value: 0, valueShow: '', percent: 0 };
+						this.panel.progressArr.push(objTempEdit);
+						this.dataTemp.progressArr.push(objTemp);
 					}
 				}, {
 					key: 'addBarMember',
 					value: function addBarMember() {
-						var objTemp = {
-							label: '', unit: '', value: 0, percent: '0%', format: 'short'
-						};
-						this.panel.barsArr.push(objTemp);
+						var objTempEdit = {
+							label: '', unit: '', format: 'short'
+						},
+						    objTemp = { value: 0, valueShow: '', percent: 0 };
+						this.panel.barsArr.push(objTempEdit);
+						this.dataTemp.barsArr.push(objTemp);
 					}
 				}, {
 					key: 'delProgress',
 					value: function delProgress(index) {
 						this.panel.progressArr.splice(index, 1);
+						this.dataTemp.progressArr.splice(index, 1);
+						this.render();
 					}
 				}, {
 					key: 'delBarMember',
 					value: function delBarMember(index) {
 						this.panel.barsArr.splice(index, 1);
+						this.dataTemp.barsArr.splice(index, 1);
 						var total = 0;
-						this.panel.barsArr.forEach(function (value, index, arr) {
+						this.dataTemp.barsArr.forEach(function (value, index, arr) {
 							total = Math.round(total) + Math.round(value.value);
 						});
-						this.panel.barsArr.forEach(function (value, index, arr) {
-							value.percent = value.value / total * 100 + '%';
+						this.dataTemp.barsArr.forEach(function (value, index, arr) {
+							if (total === 0) {
+								value.percent = index == 0 ? 100 : 0;
+							} else {
+								value.percent = value.value / total * 100;
+							}
 						});
+						this.render();
 					}
 				}, {
 					key: 'link',

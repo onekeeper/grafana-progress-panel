@@ -1,12 +1,15 @@
 'use strict';
 
-System.register(['app/core/utils/kbn'], function (_export, _context) {
+System.register(['app/core/utils/kbn', 'lodash'], function (_export, _context) {
 	"use strict";
 
-	var kbn, unitObj;
+	var kbn, _, unitObj;
+
 	return {
 		setters: [function (_appCoreUtilsKbn) {
 			kbn = _appCoreUtilsKbn.default;
+		}, function (_lodash) {
+			_ = _lodash.default;
 		}],
 		execute: function () {
 			unitObj = {
@@ -36,6 +39,26 @@ System.register(['app/core/utils/kbn'], function (_export, _context) {
 						}
 					}
 					return seriesFull;
+				},
+				checkProgressArr: function checkProgressArr(source, target) {
+					if (source.length == target.length) {
+						return target;
+					} else {
+						target = _.map(source, function (so, i) {
+							return {
+								value: so.value || '',
+								valueShow: so.valueShow || '',
+								percent: so.percent || 0
+							};
+						});
+						/*针对之前部署的信息*/
+						_.map(source, function (so, i) {
+							so.hasOwnProperty("value") && delete so.value;
+							so.hasOwnProperty("valueShow") && delete so.valueShow;
+							so.hasOwnProperty("percent") && delete so.percent;
+						});
+						return target;
+					}
 				},
 				getDecimalsForValue: function getDecimalsForValue(panel, value) {
 					if (_.isNumber(panel.decimals)) {
