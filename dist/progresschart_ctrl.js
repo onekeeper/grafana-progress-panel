@@ -78,12 +78,14 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 					var panelDefaults = {
 						colorArr: ['#5eb1e4', '#4888e0', '#2adf6e', '#FFB90F', '#FF4500'],
 						progressArr: [],
-						barsArr: []
+						barsArr: [],
+						doughnutsArr: []
 					};
 
 					_this.dataTemp = {
 						progressArr: [],
-						barsArr: []
+						barsArr: [],
+						doughnutsArr: []
 					};
 
 					_.defaults(_this.panel, panelDefaults);
@@ -127,7 +129,8 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 
 						this.dataTemp = {
 							progressArr: unit.checkProgressArr(this.panel.progressArr, this.dataTemp.progressArr),
-							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr)
+							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
+							doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 						};
 						if (series && series.length > 0) {
 							series = unit.checkSeries(this.panel.targets, series);
@@ -185,6 +188,7 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 									}
 								}
 							});
+							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
 						} else {
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
@@ -196,6 +200,7 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 								value.percent = index == 0 ? 100 : 0;
 								value.valueShow = 'N/A';
 							});
+							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
 						}
 						return this.dataTemp;
 					}
@@ -242,6 +247,16 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 						this.dataTemp.barsArr.push(objTemp);
 					}
 				}, {
+					key: 'addDoughnutMember',
+					value: function addDoughnutMember() {
+						var objTempEdit = {
+							label: ''
+						},
+						    objTemp = { value: 0, valueShow: '', percent: 0 };
+						this.panel.doughnutsArr.push(objTempEdit);
+						this.dataTemp.doughnutsArr.push(objTemp);
+					}
+				}, {
 					key: 'delProgress',
 					value: function delProgress(index) {
 						this.panel.progressArr.splice(index, 1);
@@ -266,6 +281,9 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 						});
 						this.render();
 					}
+				}, {
+					key: 'delDoughnutMember',
+					value: function delDoughnutMember(index) {}
 				}, {
 					key: 'link',
 					value: function link(scope, elem) {

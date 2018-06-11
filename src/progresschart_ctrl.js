@@ -165,14 +165,19 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		let objTempEdit = {
 			label: '', unit: '', format: 'short'
 		},
-			objTemp = { value: 0, valueShow: '', percent: 0 };
+		objTemp = { value: 0, valueShow: '', percent: 0 };
 		this.panel.barsArr.push(objTempEdit);
 		this.dataTemp.barsArr.push(objTemp);
 	}
 
 	// -----------------------------------------------------------------Doughnut DOM 添加-----------------------------------------------------------------
 	addDoughnutMember() {
-		
+		let objTempEdit = {
+			label: ''
+		},
+		objTemp = { value: 0, valueShow: '', percent: 0 };
+		this.panel.doughnutsArr.push(objTempEdit);
+		this.dataTemp.doughnutsArr.push(objTemp);
 	}
 
 	delProgress(index) {
