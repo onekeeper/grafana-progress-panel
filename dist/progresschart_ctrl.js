@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', './css/panel.css!'], function (_export, _context) {
+System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/utils/kbn', './css/panel.css!'], function (_export, _context) {
 	"use strict";
 
-	var MetricsPanelCtrl, _, unit, kbn, _createClass, ProgressChartCtrl;
+	var MetricsPanelCtrl, Draw, _, unit, kbn, _createClass, ProgressChartCtrl;
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
@@ -38,6 +38,8 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 	return {
 		setters: [function (_appPluginsSdk) {
 			MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
+		}, function (_draw) {
+			Draw = _draw.Draw;
 		}, function (_lodash) {
 			_ = _lodash.default;
 		}, function (_unit) {
@@ -189,6 +191,7 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 								}
 							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
+							this.draw();
 						} else {
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
@@ -201,6 +204,7 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 								value.valueShow = 'N/A';
 							});
 							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
+							this.draw();
 						}
 						return this.dataTemp;
 					}
@@ -225,6 +229,14 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 					key: 'getBarStyle',
 					value: function getBarStyle(index) {
 						return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
+					}
+				}, {
+					key: 'getDoughnutStyle',
+					value: function getDoughnutStyle(index) {
+						return {
+							'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+							'height': document.querySelectorAll(".doughnut-contanier")[index].clientWidth
+						};
 					}
 				}, {
 					key: 'addProgress',
@@ -289,12 +301,34 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 						this.render();
 					}
 				}, {
+					key: 'draw',
+					value: function draw() {
+						console.log("doughnutsArr", this.panel.doughnutsArr);
+						if (document.querySelectorAll(".doughnut-contanier")) {
+							console.log("BOOM!");
+							console.log(document.querySelectorAll(".doughnut-contanier"));
+							this.panel.doughnutsArr.map(function (item, index) {
+								if (document.querySelectorAll(".doughnut-contanier")[index]) {
+									console.log(document.querySelectorAll(".doughnut-contanier")[index].clientWidth);
+									Draw({
+										dom: document.querySelectorAll(".doughnut-contanier")[index],
+										width: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+										height: document.querySelectorAll(".doughnut-contanier")[index].clientWidth
+									});
+								}
+							});
+						}
+					}
+				}, {
 					key: 'link',
 					value: function link(scope, elem) {
+						var _this3 = this;
+
 						this.events.on('render', function () {
 							var $panelContainer = elem.find('.panel-container');
 							var $progressPanel = elem.find('.progress-panel');
 							$progressPanel.css('height', $panelContainer[0].offsetHeight - 40 + 'px');
+							_this3.draw();
 						});
 					}
 				}]);

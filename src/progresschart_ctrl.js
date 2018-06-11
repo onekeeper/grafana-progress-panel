@@ -1,4 +1,5 @@
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
+import  { Draw } from './draw'
 import _ from 'lodash';
 import unit from './unit';
 import kbn from 'app/core/utils/kbn';
@@ -116,6 +117,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				}
 			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
+			this.draw();
 		} else {
 			this.dataTemp.progressArr.forEach((value, index, arr) => {
 				value.value = 0;
@@ -128,6 +130,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				value.valueShow = 'N/A';
 			})
 			// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
+			this.draw();
 		}
 		return this.dataTemp;
 	}
@@ -151,6 +154,12 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	}
 	
 	// -----------------------------------------------------------------Doughnut 样式获取-----------------------------------------------------------------
+	getDoughnutStyle(index) {
+		return {
+			'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+			'height': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+		}
+	}
 
 	addProgress() {
 		let objTempEdit = {
@@ -210,11 +219,31 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		this.render();
 	}
 
+	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
+	draw() {
+		console.log("doughnutsArr", this.panel.doughnutsArr);
+		if(document.querySelectorAll(".doughnut-contanier")) {
+			console.log("BOOM!");
+			console.log(document.querySelectorAll(".doughnut-contanier"));
+			this.panel.doughnutsArr.map((item, index)=>{
+				if(document.querySelectorAll(".doughnut-contanier")[index]) {
+					console.log(document.querySelectorAll(".doughnut-contanier")[index].clientWidth);
+					Draw({
+						dom: document.querySelectorAll(".doughnut-contanier")[index],
+						width: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+						height: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+					});
+				}
+			});
+		}
+	}
+
 	link(scope, elem) {
 		this.events.on('render', () => {
 			const $panelContainer = elem.find('.panel-container');
 			const $progressPanel = elem.find('.progress-panel');
 			$progressPanel.css('height', ($panelContainer[0].offsetHeight - 40) + 'px');
+			this.draw();
 		});
 	}
 }
