@@ -171,6 +171,9 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	}
 
 	// -----------------------------------------------------------------Doughnut DOM 添加-----------------------------------------------------------------
+	addDoughnutMember() {
+		
+	}
 
 	delProgress(index) {
 		this.panel.progressArr.splice(index, 1);
@@ -196,7 +199,10 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	}
 
 	// -----------------------------------------------------------------Doughnut DOM 删除-----------------------------------------------------------------
-	
+	delDoughnutMember(index) {
+
+	}
+
 	link(scope, elem) {
 		this.events.on('render', () => {
 			const $panelContainer = elem.find('.panel-container');
