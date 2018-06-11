@@ -283,7 +283,11 @@ System.register(['app/plugins/sdk', 'lodash', './unit', 'app/core/utils/kbn', '.
 					}
 				}, {
 					key: 'delDoughnutMember',
-					value: function delDoughnutMember(index) {}
+					value: function delDoughnutMember(index) {
+						this.panel.doughnutsArr.splice(index, 1);
+						this.dataTemp.doughnutsArr.splice(index, 1);
+						this.render();
+					}
 				}, {
 					key: 'link',
 					value: function link(scope, elem) {

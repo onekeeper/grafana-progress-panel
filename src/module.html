@@ -34,7 +34,9 @@
 				</td>
 			</tr>
 			<tr ng-if="ctrl.panel.doughnutsArr.length > 0" class="doughnut-container">
-				<td></td>
+				<td ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index" ng-if="doughnut.label">
+					<span>{{doughnut.label}}</span>
+				</td>
 			</tr>
 		</table>
 	</div>

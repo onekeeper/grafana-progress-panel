@@ -205,7 +205,9 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 
 	// -----------------------------------------------------------------Doughnut DOM 删除-----------------------------------------------------------------
 	delDoughnutMember(index) {
-
+		this.panel.doughnutsArr.splice(index, 1);
+		this.dataTemp.doughnutsArr.splice(index, 1);
+		this.render();
 	}
 
 	link(scope, elem) {
