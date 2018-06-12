@@ -49,12 +49,13 @@ System.register([], function (_export, _context) {
                 return { x: x, y: y };
             };
 
-            doughnut = function doughnut(opt, dom) {
+            doughnut = function doughnut(opt) {
+                console.log(opt);
                 var drawSize = opt.width <= opt.height ? opt.width : opt.height;
                 var Num = opt.data.length;
 
                 // let cv = document.getElementById(opt.dom);
-                var cv = dom;
+                var cv = opt.dom;
                 var ctx = cv.getContext("2d");
                 var ctx2 = cv.getContext("2d");
 

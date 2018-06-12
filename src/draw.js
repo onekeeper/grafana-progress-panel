@@ -42,12 +42,13 @@ let calLineTo = (a, r)=>{
     let y = Math.sin(a * 2 * Math.PI / 360) * r;
     return {x:x, y:y}
 }
-let doughnut = (opt, dom)=>{
+let doughnut = (opt)=>{
+    console.log(opt);
 	let drawSize = (opt.width <= opt.height ? opt.width : opt.height);
     let Num = opt.data.length;
 
     // let cv = document.getElementById(opt.dom);
-    let cv = dom;
+    let cv = opt.dom;
     let ctx = cv.getContext("2d");
     let ctx2 = cv.getContext("2d");
 

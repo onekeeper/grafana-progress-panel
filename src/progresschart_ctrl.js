@@ -117,7 +117,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				}
 			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-			this.draw();
+			this.draw(this.getDOM());
 		} else {
 			this.dataTemp.progressArr.forEach((value, index, arr) => {
 				value.value = 0;
@@ -130,7 +130,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				value.valueShow = 'N/A';
 			})
 			// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-			this.draw();
+			this.draw(this.getDOM());
 		}
 		return this.dataTemp;
 	}
@@ -220,22 +220,31 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	}
 
 	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
-	draw() {
-		console.log("doughnutsArr", this.panel.doughnutsArr);
-		if(document.querySelectorAll(".doughnut-contanier")) {
-			console.log("BOOM!");
-			console.log(document.querySelectorAll(".doughnut-contanier"));
-			this.panel.doughnutsArr.map((item, index)=>{
-				if(document.querySelectorAll(".doughnut-contanier")[index]) {
-					console.log(document.querySelectorAll(".doughnut-contanier")[index].clientWidth);
-					Draw({
-						dom: document.querySelectorAll(".doughnut-contanier")[index],
-						width: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-						height: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-					});
-				}
+	draw(domList) {
+		console.log("domList", domList);
+		for(let i in domList) {
+			let dom = domList[i];
+			Draw({
+				dom: dom,
+				width: dom.clientWidth,
+				// height: dom.clientWidth,
+				height: dom.clientWidth,
 			});
 		}
+	}
+	getDOM() {
+		let domList = [];
+		for(let i in this.panel.doughnutsArr) {
+			if(document.querySelectorAll(".doughnut-contanier")[i]) {
+				domList.push(document.querySelectorAll(".doughnut-contanier")[i]);
+			}
+		}
+		return domList;
+	}
+
+	doughnutInit(index) {
+		let dom = document.querySelectorAll(".doughnut-contanier")[index].children[1];
+		this.draw([dom]);
 	}
 
 	link(scope, elem) {
@@ -243,7 +252,6 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			const $panelContainer = elem.find('.panel-container');
 			const $progressPanel = elem.find('.progress-panel');
 			$progressPanel.css('height', ($panelContainer[0].offsetHeight - 40) + 'px');
-			this.draw();
 		});
 	}
 }

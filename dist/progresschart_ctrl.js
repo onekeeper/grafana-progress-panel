@@ -191,7 +191,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								}
 							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-							this.draw();
+							this.draw(this.getDOM());
 						} else {
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
@@ -204,7 +204,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								value.valueShow = 'N/A';
 							});
 							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-							this.draw();
+							this.draw(this.getDOM());
 						}
 						return this.dataTemp;
 					}
@@ -302,33 +302,42 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					}
 				}, {
 					key: 'draw',
-					value: function draw() {
-						console.log("doughnutsArr", this.panel.doughnutsArr);
-						if (document.querySelectorAll(".doughnut-contanier")) {
-							console.log("BOOM!");
-							console.log(document.querySelectorAll(".doughnut-contanier"));
-							this.panel.doughnutsArr.map(function (item, index) {
-								if (document.querySelectorAll(".doughnut-contanier")[index]) {
-									console.log(document.querySelectorAll(".doughnut-contanier")[index].clientWidth);
-									Draw({
-										dom: document.querySelectorAll(".doughnut-contanier")[index],
-										width: document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-										height: document.querySelectorAll(".doughnut-contanier")[index].clientWidth
-									});
-								}
+					value: function draw(domList) {
+						console.log("domList", domList);
+						for (var i in domList) {
+							var dom = domList[i];
+							Draw({
+								dom: dom,
+								width: dom.clientWidth,
+								// height: dom.clientWidth,
+								height: dom.clientWidth
 							});
 						}
 					}
 				}, {
+					key: 'getDOM',
+					value: function getDOM() {
+						var domList = [];
+						for (var i in this.panel.doughnutsArr) {
+							if (document.querySelectorAll(".doughnut-contanier")[i]) {
+								domList.push(document.querySelectorAll(".doughnut-contanier")[i]);
+							}
+						}
+						return domList;
+					}
+				}, {
+					key: 'doughnutInit',
+					value: function doughnutInit(index) {
+						var dom = document.querySelectorAll(".doughnut-contanier")[index].children[1];
+						this.draw([dom]);
+					}
+				}, {
 					key: 'link',
 					value: function link(scope, elem) {
-						var _this3 = this;
-
 						this.events.on('render', function () {
 							var $panelContainer = elem.find('.panel-container');
 							var $progressPanel = elem.find('.progress-panel');
 							$progressPanel.css('height', $panelContainer[0].offsetHeight - 40 + 'px');
-							_this3.draw();
 						});
 					}
 				}]);
