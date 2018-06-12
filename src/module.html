@@ -33,6 +33,22 @@
 					-->					
 				</td>
 			</tr>
+			<tr ng-if="ctrl.panel.doughnutsArr.length > 0" class="doughnuts-contanier">
+				<td 
+					ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index" 
+					ng-if="doughnut.label" 
+					class="doughnut-contanier"
+					ng-style="{
+						width: 1 / ctrl.panel.doughnutsArr.length * 100 + '%',
+						padding: 0,
+						margin: 0,
+					}"
+					ng-init="ctrl.doughnutInit($index)"
+				>
+					<span class="doughnut-label">{{doughnut.label}}</span>
+					<canvas id="{{'doughnut_'+$index}}" ng-style="ctrl.getDoughnutStyle($index)"></canvas>
+				</td>
+			</tr>
 		</table>
 	</div>
 </div>

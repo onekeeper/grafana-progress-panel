@@ -1,71 +1,98 @@
 <div class="editor-row">
-  <div class="section gf-form-group">
-    <h5 class="section-heading">Progress</h5>
-	<div ng-repeat="pro in ctrl.panel.progressArr track by $index">
-		<div class="gf-form">
-		  <span class="gf-form-label width-8">Label</span>
-		  <div class="gf-form-select-wrapper max-width-10">
-			<input type="text" class="gf-form-input max-width-10" ng-model="pro.label" ng-change="ctrl.render()">
-		  </div>
-		  <span ng-click="ctrl.delProgress($index)" class="pointer btn btn-small del-img">
-			<span><i class="fa"></i></span>
-		  </span>
-        </span>
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Progress</h5>
+		<div ng-repeat="pro in ctrl.panel.progressArr track by $index">
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Label</span>
+				<div class="gf-form-select-wrapper max-width-10">
+					<input type="text" class="gf-form-input max-width-10" ng-model="pro.label" ng-change="ctrl.render()">
+				</div>
+				<span ng-click="ctrl.delProgress($index)" class="pointer btn btn-small del-img">
+					<span>
+						<i class="fa"></i>
+					</span>
+				</span>
+				</span>
+			</div>
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Unit</span>
+				<div class="gf-form-dropdown-typeahead width-10" ng-model="pro.format" dropdown-typeahead="ctrl.unitFormats" dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem, pro)">
+				</div>
+			</div>
+			<div class="gf-form">
+				<span class="gf-form-label width-8">type</span>
+				<div class="gf-form-select-wrapper max-width-10">
+					<select class="gf-form-input max-width-10" ng-model="pro.type" ng-options="s for s in ['solid', 'dotted']" ng-change="ctrl.render()"></select>
+				</div>
+			</div>
+			<hr class="separate-hr" />
 		</div>
-		<div class="gf-form">
-		  <span class="gf-form-label width-8">Unit</span>
-		  <div class="gf-form-dropdown-typeahead width-10"
-			ng-model="pro.format"
-			dropdown-typeahead="ctrl.unitFormats"
-			dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem, pro)">
-		  </div>
+		<div class="add-row-panel-hint">
+			<div class="span12" style="text-align:left">
+				<span ng-click="ctrl.addProgress()" class="pointer btn btn-inverse btn-small">
+					<span>
+						<i class="fa fa-plus"></i> ADD</span>
+				</span>
+			</div>
 		</div>
-		<div class="gf-form">
-		  <span class="gf-form-label width-8">type</span>
-		  <div class="gf-form-select-wrapper max-width-10">
-			<select class="gf-form-input max-width-10" ng-model="pro.type" ng-options="s for s in ['solid', 'dotted']" ng-change="ctrl.render()"></select>
-		  </div>
-		</div>
-		<hr class="separate-hr"/>
 	</div>
-	<div class="add-row-panel-hint">
-      <div class="span12" style="text-align:left">
-        <span ng-click="ctrl.addProgress()" class="pointer btn btn-inverse btn-small">
-          <span><i class="fa fa-plus"></i> ADD</span>
-        </span>
-      </div>
-    </div>
-  </div>
-  
-  <div class="section gf-form-group">
-    <h5 class="section-heading">Bar</h5>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Bar</h5>
+
+		<div ng-repeat="bar in ctrl.panel.barsArr track by $index">
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Label</span>
+				<div class="gf-form-select-wrapper max-width-10">
+					<input type="text" class="gf-form-input max-width-10" ng-model="bar.label" ng-change="ctrl.render()">
+				</div>
+				<span ng-click="ctrl.delBarMember($index)" class="pointer btn btn-small del-img">
+					<span>
+						<i class="fa"></i>
+					</span>
+				</span>
+			</div>
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Unit</span>
+				<div class="gf-form-dropdown-typeahead width-10" ng-model="bar.format" dropdown-typeahead="ctrl.unitFormats" dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem, bar)">
+				</div>
+			</div>
+			<hr class="separate-hr" />
+		</div>
+		<div class="add-row-panel-hint">
+			<div class="span12" style="text-align:left">
+				<span ng-click="ctrl.addBarMember()" class="pointer btn btn-inverse btn-small">
+					<span>
+						<i class="fa fa-plus"></i> ADD</span>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="section gf-form-group">
+			<h5 class="section-heading">Doughnut</h5>
 	
-	<div ng-repeat="bar in ctrl.panel.barsArr track by $index">
-		<div class="gf-form">
-		  <span class="gf-form-label width-8">Label</span>
-		  <div class="gf-form-select-wrapper max-width-10">
-			<input type="text" class="gf-form-input max-width-10" ng-model="bar.label" ng-change="ctrl.render()">
-		  </div>
-		  <span ng-click="ctrl.delBarMember($index)" class="pointer btn btn-small del-img">
-			<span><i class="fa"></i></span>
-		  </span>
+			<div ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index">
+				<div class="gf-form">
+					<span class="gf-form-label width-8">Label</span>
+					<div class="gf-form-select-wrapper max-width-10">
+						<input type="text" class="gf-form-input max-width-10" ng-model="doughnut.label" ng-change="ctrl.render()">
+					</div>
+					<span ng-click="ctrl.delDoughnutMember($index)" class="pointer btn btn-small del-img">
+						<span>
+							<i class="fa"></i>
+						</span>
+					</span>
+				</div>
+				<hr class="separate-hr" />
+			</div>
+			<div class="add-row-panel-hint">
+				<div class="span12" style="text-align:left">
+					<span ng-click="ctrl.addDoughnutMember()" class="pointer btn btn-inverse btn-small">
+						<span>
+							<i class="fa fa-plus"></i> ADD</span>
+					</span>
+				</div>
+			</div>
 		</div>
-		<div class="gf-form">
-		  <span class="gf-form-label width-8">Unit</span>
-		  <div class="gf-form-dropdown-typeahead width-10"
-			ng-model="bar.format"
-			dropdown-typeahead="ctrl.unitFormats"
-			dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem, bar)">
-		  </div>
-		</div>
-		<hr class="separate-hr"/>
-	</div>
-	<div class="add-row-panel-hint">
-      <div class="span12" style="text-align:left">
-        <span ng-click="ctrl.addBarMember()" class="pointer btn btn-inverse btn-small">
-          <span><i class="fa fa-plus"></i> ADD</span>
-        </span>
-      </div>
-    </div
-  </div>
 </div>

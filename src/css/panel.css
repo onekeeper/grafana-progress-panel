@@ -126,3 +126,34 @@
 .separate-hr{
 	height:1px;border:none;border-top:1px dashed #ccc;margin-top:8px;margin-bottom:8px;
 }
+
+/* ---------------------------------------------doughnutChart Style--------------------------------------------- */
+.doughnuts-contanier {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+.doughnut-contanier {
+	/* background-color: skyblue; */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	position: relative;
+}
+.doughnut-label {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.doughnut-contanier canvas {
+	max-width: 100%;
+	max-height: 100%;
+}
