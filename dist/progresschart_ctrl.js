@@ -191,7 +191,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								}
 							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-							this.draw(this.getDOM());
+							this.draw(this.getDoughnutList());
 						} else {
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
@@ -204,7 +204,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								value.valueShow = 'N/A';
 							});
 							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-							this.draw(this.getDOM());
+							this.draw(this.getDoughnutList());
 						}
 						return this.dataTemp;
 					}
@@ -229,17 +229,6 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					key: 'getBarStyle',
 					value: function getBarStyle(index) {
 						return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
-					}
-				}, {
-					key: 'getDoughnutStyle',
-					value: function getDoughnutStyle(index) {
-						console.log("progresschart.js/getDoughnutStyle is run.");
-
-						return {
-							'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-							// 'height': "100px",
-							'height': document.querySelectorAll(".doughnut-contanier")[index].clientHeight
-						};
 					}
 				}, {
 					key: 'addProgress',
@@ -307,20 +296,20 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					key: 'draw',
 					value: function draw(domList) {
 						console.log("progresschart.js/draw is run.");
-						console.log("domList", domList);
 						for (var i in domList) {
 							var dom = domList[i];
-							console.log(dom);
+							dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+							dom.height = 100;
 							Draw({
 								dom: dom,
-								width: dom.clientWidth,
-								height: dom.clientHeight
+								width: dom.width,
+								height: dom.height
 							});
 						}
 					}
 				}, {
-					key: 'getDOM',
-					value: function getDOM() {
+					key: 'getDoughnutList',
+					value: function getDoughnutList() {
 						var domList = [];
 						for (var i in this.panel.doughnutsArr) {
 							if (document.querySelectorAll(".doughnut-contanier")[i]) {
@@ -332,15 +321,9 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 				}, {
 					key: 'doughnutInit',
 					value: function doughnutInit(index, len) {
-						console.log("this.doughnutsArr.length", len);
-						console.log("index", index);
 						var arr = [];
 						if (index == len - 1) {
-							for (var i = 0; i < len; i++) {
-								var dom = document.querySelectorAll(".doughnut-contanier")[i].children[1];
-								arr.push(dom);
-							}
-							console.log("arr", arr);
+							arr = this.getDoughnutList();
 							this.draw(arr);
 						}
 					}

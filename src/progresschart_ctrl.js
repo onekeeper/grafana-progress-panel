@@ -117,7 +117,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				}
 			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-			this.draw(this.getDOM());
+			this.draw(this.getDoughnutList());
 		} else {
 			this.dataTemp.progressArr.forEach((value, index, arr) => {
 				value.value = 0;
@@ -130,7 +130,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				value.valueShow = 'N/A';
 			})
 			// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-			this.draw(this.getDOM());
+			this.draw(this.getDoughnutList());
 		}
 		return this.dataTemp;
 	}
@@ -151,17 +151,6 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 
 	getBarStyle(index) {
 		return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
-	}
-	
-	// -----------------------------------------------------------------Doughnut 样式获取-----------------------------------------------------------------
-	getDoughnutStyle(index) {
-		console.log("progresschart.js/getDoughnutStyle is run.");
-
-		return {
-			'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-			// 'height': "100px",
-			'height': document.querySelectorAll(".doughnut-contanier")[index].clientHeight,
-		}
 	}
 
 	addProgress() {
@@ -191,6 +180,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		this.panel.doughnutsArr.push(objTempEdit);
 		this.dataTemp.doughnutsArr.push(objTemp);
 	}
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	delProgress(index) {
 		this.panel.progressArr.splice(index, 1);
@@ -221,22 +211,25 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		this.dataTemp.doughnutsArr.splice(index, 1);
 		this.render();
 	}
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
 	draw(domList) {
 		console.log("progresschart.js/draw is run.");
-		console.log("domList", domList);
 		for(let i in domList) {
 			let dom = domList[i];
-			console.log(dom);
+			dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+			dom.height = 100;
 			Draw({
 				dom: dom,
-				width: dom.clientWidth,
-				height: dom.clientHeight,
+				width: dom.width,
+				height: dom.height,
 			});
 		}
 	}
-	getDOM() {
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	getDoughnutList() {
 		let domList = [];
 		for(let i in this.panel.doughnutsArr) {
 			if(document.querySelectorAll(".doughnut-contanier")[i]) {
@@ -245,20 +238,15 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		}
 		return domList;
 	}
-
+	// ---------------------------------------------圆环图初始化----------------------------------------------------------------------------------------------------------
 	doughnutInit(index, len) {
-		console.log("this.doughnutsArr.length", len);
-		console.log("index", index);
 		let arr = [];
 		if(index == (len - 1)){
-			for(let i = 0; i < len; i++){
-				let dom = document.querySelectorAll(".doughnut-contanier")[i].children[1];
-				arr.push(dom);
-			}
-			console.log("arr", arr);
+			arr = this.getDoughnutList();
 			this.draw(arr);
 		}
 	}
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	link(scope, elem) {
 		this.events.on('render', () => {
