@@ -43,18 +43,18 @@ let calLineTo = (a, r)=>{
     return {x:x, y:y}
 }
 let doughnut = (opt)=>{
-    console.log(opt);
-	let drawSize = (opt.width <= opt.height ? opt.width : opt.height);
+    console.log("draw.js/doughnut is run.");
+    let drawSize = (opt.width <= opt.height ? opt.width : opt.height);
+    console.log(drawSize);
     let Num = opt.data.length;
-
-    // let cv = document.getElementById(opt.dom);
     let cv = opt.dom;
     let ctx = cv.getContext("2d");
     let ctx2 = cv.getContext("2d");
+    ctx.clearRect(0, 0, 999999, 999999);
+    ctx2.clearRect(0, 0, 999999, 999999);
 
-    cv.width = opt.width;
-    cv.height = opt.height;
 
+    // --------------------------------------//
     var x0 = (opt.width - opt.padding * 2) / 2 + opt.padding , y0 = (opt.height - opt.padding * 2) / 2 + opt.padding,
     radius = (drawSize - opt.padding * 2) / 2,
     radiusInSide = radius * 0.75,

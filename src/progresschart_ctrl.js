@@ -155,9 +155,12 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	
 	// -----------------------------------------------------------------Doughnut 样式获取-----------------------------------------------------------------
 	getDoughnutStyle(index) {
+		console.log("progresschart.js/getDoughnutStyle is run.");
+
 		return {
 			'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-			'height': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
+			// 'height': "100px",
+			'height': document.querySelectorAll(".doughnut-contanier")[index].clientHeight,
 		}
 	}
 
@@ -221,14 +224,15 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 
 	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
 	draw(domList) {
+		console.log("progresschart.js/draw is run.");
 		console.log("domList", domList);
 		for(let i in domList) {
 			let dom = domList[i];
+			console.log(dom);
 			Draw({
 				dom: dom,
 				width: dom.clientWidth,
-				// height: dom.clientWidth,
-				height: dom.clientWidth,
+				height: dom.clientHeight,
 			});
 		}
 	}
@@ -236,15 +240,24 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		let domList = [];
 		for(let i in this.panel.doughnutsArr) {
 			if(document.querySelectorAll(".doughnut-contanier")[i]) {
-				domList.push(document.querySelectorAll(".doughnut-contanier")[i]);
+				domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
 			}
 		}
 		return domList;
 	}
 
-	doughnutInit(index) {
-		let dom = document.querySelectorAll(".doughnut-contanier")[index].children[1];
-		this.draw([dom]);
+	doughnutInit(index, len) {
+		console.log("this.doughnutsArr.length", len);
+		console.log("index", index);
+		let arr = [];
+		if(index == (len - 1)){
+			for(let i = 0; i < len; i++){
+				let dom = document.querySelectorAll(".doughnut-contanier")[i].children[1];
+				arr.push(dom);
+			}
+			console.log("arr", arr);
+			this.draw(arr);
+		}
 	}
 
 	link(scope, elem) {

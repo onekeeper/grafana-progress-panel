@@ -233,9 +233,12 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 				}, {
 					key: 'getDoughnutStyle',
 					value: function getDoughnutStyle(index) {
+						console.log("progresschart.js/getDoughnutStyle is run.");
+
 						return {
 							'width': document.querySelectorAll(".doughnut-contanier")[index].clientWidth,
-							'height': document.querySelectorAll(".doughnut-contanier")[index].clientWidth
+							// 'height': "100px",
+							'height': document.querySelectorAll(".doughnut-contanier")[index].clientHeight
 						};
 					}
 				}, {
@@ -303,14 +306,15 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 				}, {
 					key: 'draw',
 					value: function draw(domList) {
+						console.log("progresschart.js/draw is run.");
 						console.log("domList", domList);
 						for (var i in domList) {
 							var dom = domList[i];
+							console.log(dom);
 							Draw({
 								dom: dom,
 								width: dom.clientWidth,
-								// height: dom.clientWidth,
-								height: dom.clientWidth
+								height: dom.clientHeight
 							});
 						}
 					}
@@ -320,16 +324,25 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						var domList = [];
 						for (var i in this.panel.doughnutsArr) {
 							if (document.querySelectorAll(".doughnut-contanier")[i]) {
-								domList.push(document.querySelectorAll(".doughnut-contanier")[i]);
+								domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
 							}
 						}
 						return domList;
 					}
 				}, {
 					key: 'doughnutInit',
-					value: function doughnutInit(index) {
-						var dom = document.querySelectorAll(".doughnut-contanier")[index].children[1];
-						this.draw([dom]);
+					value: function doughnutInit(index, len) {
+						console.log("this.doughnutsArr.length", len);
+						console.log("index", index);
+						var arr = [];
+						if (index == len - 1) {
+							for (var i = 0; i < len; i++) {
+								var dom = document.querySelectorAll(".doughnut-contanier")[i].children[1];
+								arr.push(dom);
+							}
+							console.log("arr", arr);
+							this.draw(arr);
+						}
 					}
 				}, {
 					key: 'link',
