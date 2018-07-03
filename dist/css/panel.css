@@ -1,11 +1,11 @@
 .progress-panel {
 	text-align:center;
     min-height: 8rem;
-    display: flex;
     padding-top: 2.6rem;
     padding-bottom: 2rem;
-    flex-direction: column;
-    justify-content: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
 }
 
 .custom-progress{
@@ -129,13 +129,14 @@
 
 /* ---------------------------------------------doughnutChart Style--------------------------------------------- */
 .doughnuts-contanier {
-	width: 100%;
+	width: 90%;
 	padding: 0;
 	margin: 0;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: flex-start;
+	box-sizing: border-box;
 }
 .doughnut-contanier {
 	/* background-color: skyblue; */

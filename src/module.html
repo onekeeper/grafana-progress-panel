@@ -1,6 +1,7 @@
 <div class="progress-panel small" ng-style="{height: ctrl.height}">
     <div class="row">
 		<table class="custom-progress">
+<!------------------------------------------------ Progress ------------------------------------------------>			
 			<tr ng-repeat="progress in ctrl.panel.progressArr track by $index" ng-if="progress.label">
 				<td class="text-left label-td" ng-bind="progress.label" title="{{progress.label}}"></td>
 				<td class="chart-td">
@@ -17,6 +18,7 @@
 				<td class="value-td" title="{{progress.valueShow}}">{{progress.valueShow}}</td>
 				-->
 			</tr>
+<!------------------------------------------------ Bar ------------------------------------------------>			
 			<tr ng-if="ctrl.panel.barsArr.length > 0">
 				<td colspan="3" class="bar-td">
 					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && ctrl.dataTemp.barsArr[$index].percent>0" class="bar-div" 
@@ -33,26 +35,25 @@
 					-->					
 				</td>
 			</tr>
-
-<!------------------------------------------------ Doughnuts Charts ------------------------------------------------>
-			<tr ng-if="ctrl.panel.doughnutsArr.length > 0" class="doughnuts-contanier" style="table-layout:fixed">
-				<!-- 循环渲染，宽度平分，高度固定 -->
-				<td 
-					ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index" 
-					ng-if="doughnut.label" 
-					class="doughnut-contanier"
-					ng-style="{
-						width: 1 / ctrl.panel.doughnutsArr.length * 100 + '%',
-						padding: 0,
-						margin: 0,
-					}"
-					ng-init="ctrl.doughnutInit($index, ctrl.panel.doughnutsArr.length)"
-				>
-					<span class="doughnut-label">{{doughnut.label}}</span>
-					<canvas id="{{'doughnut_'+$index}}"></canvas>
-				</td>
-			</tr>
 		</table>
+		<!------------------------------------------------ Doughnuts Charts ------------------------------------------------>
+		<div ng-if="ctrl.panel.doughnutsArr.length > 0" class="doughnuts-contanier">
+			<!-- 循环渲染，宽度平分，高度固定 -->
+			<div 
+				ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index" 
+				ng-if="doughnut.label" 
+				class="doughnut-contanier"
+				ng-style="{
+					width: 1 / ctrl.panel.doughnutsArr.length * 100 + '%',
+					padding: 0,
+					margin: 0,
+				}"
+				ng-init="ctrl.doughnutInit($index, ctrl.panel.doughnutsArr.length)"
+			>
+				<span class="doughnut-label">{{doughnut.label}}</span>
+				<canvas id="{{'doughnut_'+$index}}"></canvas>
+			</div>
+		</div>
 	</div>
 </div>
 
