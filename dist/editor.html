@@ -72,15 +72,21 @@
 		<h5 class="section-heading">Doughnut</h5>
 		<div ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index">
 			<div class="gf-form">
-				<span class="gf-form-label width-8">Label</span>
+				<span class="gf-form-label width-8">ID</span>
 				<div class="gf-form-select-wrapper max-width-10">
-					<input type="text" class="gf-form-input max-width-10" ng-model="doughnut.label" ng-change="ctrl.render()">
+					<input type="text" class="gf-form-input max-width-10" ng-model="doughnut.id" ng-change="ctrl.render()">
 				</div>
 				<span ng-click="ctrl.delDoughnutMember($index)" class="pointer btn btn-small del-img">
 					<span>
 						<i class="fa"></i>
 					</span>
 				</span>
+			</div>
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Label</span>
+				<div class="gf-form-select-wrapper max-width-10">
+					<input type="text" class="gf-form-input max-width-10" ng-model="doughnut.label" ng-change="ctrl.render()">
+				</div>
 			</div>
 			<hr class="separate-hr" />
 		</div>

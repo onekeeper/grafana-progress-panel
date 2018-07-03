@@ -45,14 +45,14 @@
 				class="doughnut-contanier"
 				ng-style="{
 					width: 1 / ctrl.panel.doughnutsArr.length * 100 + '%',
-					height: 100px,
+					height: 100,
 					padding: 0,
 					margin: 0,
 				}"
-				ng-init="ctrl.doughnutInit($index, ctrl.panel.doughnutsArr.length)"
+				id="{{'doughnut_'+ctrl.panel.doughnutsArr[$index].id}}"
 			>
 				<span class="doughnut-label">{{doughnut.label}}</span>
-				<canvas id="{{'doughnut_'+$index}}"></canvas>
+				<canvas ng-init="ctrl.doughnutInit($index, doughnut.id, this)"></canvas>
 			</div>
 		</div>
 	</div>

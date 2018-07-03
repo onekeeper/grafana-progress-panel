@@ -173,8 +173,13 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 
 	// -----------------------------------------------------------------Doughnut DOM 添加-----------------------------------------------------------------
 	addDoughnutMember() {
+		let autoID = ()=>{
+			for(let i = 1;i>0;i++){
+				if(document.querySelectorAll("#doughnut_"+i).length==0) return i;
+			}
+		}
 		let objTempEdit = {
-			label: ''
+			id: autoID(), label: '',
 		},
 		objTemp = { value: 0, valueShow: '', percent: 0 };
 		this.panel.doughnutsArr.push(objTempEdit);
@@ -218,7 +223,8 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		console.log("progresschart.js/draw is run.");
 		for(let i in domList) {
 			let dom = domList[i];
-			dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+			// dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+			dom.width = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[0].id)[0].clientWidth;
 			dom.height = 100;
 			Draw({
 				dom: dom,
@@ -232,19 +238,26 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	getDoughnutList() {
 		let domList = [];
 		for(let i in this.panel.doughnutsArr) {
-			if(document.querySelectorAll(".doughnut-contanier")[i]) {
-				domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
+			// if(document.querySelectorAll(".doughnut-contanier")[i]) {
+			// 	domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
+			// }
+			let target = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[i].id)[0];
+			console.log("target:",target);
+			if(target) {
+				domList.push(target.children[1]);
 			}
 		}
 		return domList;
 	}
 	// ---------------------------------------------圆环图初始化----------------------------------------------------------------------------------------------------------
-	doughnutInit(index, len) {
-		let arr = [];
-		if(index == (len - 1)){
-			arr = this.getDoughnutList();
-			this.draw(arr);
-		}
+	doughnutInit(index, id, $event) {
+		console.log(index, id, $event);
+		// this.render();
+		// let arr = [];
+		// if(index == (len - 1)){
+		// 	arr = this.getDoughnutList();
+		// 	this.draw(arr);
+		// }
 	}
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
