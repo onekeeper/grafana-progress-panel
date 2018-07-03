@@ -50,18 +50,15 @@ System.register([], function (_export, _context) {
             };
 
             doughnut = function doughnut(opt) {
-                console.log(opt);
+                console.log("draw.js/doughnut is run.");
+                console.log("opt", opt);
                 var drawSize = opt.width <= opt.height ? opt.width : opt.height;
                 var Num = opt.data.length;
-
-                // let cv = document.getElementById(opt.dom);
                 var cv = opt.dom;
                 var ctx = cv.getContext("2d");
                 var ctx2 = cv.getContext("2d");
 
-                cv.width = opt.width;
-                cv.height = opt.height;
-
+                // --------------------------------------//
                 var x0 = (opt.width - opt.padding * 2) / 2 + opt.padding,
                     y0 = (opt.height - opt.padding * 2) / 2 + opt.padding,
                     radius = (drawSize - opt.padding * 2) / 2,
