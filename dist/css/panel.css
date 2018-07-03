@@ -131,7 +131,7 @@
 .doughnuts-contanier {
 	width: 90%;
 	padding: 0;
-	margin: 0;
+	margin: 0 auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -151,6 +151,8 @@
 }
 .doughnut-label {
 	position: absolute;
+	width: 100%;
+	line-height: 100px;
 	top: 0;
 	left: 0;
 }
