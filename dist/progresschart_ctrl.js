@@ -129,6 +129,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					value: function parseSeries(series) {
 						var _this2 = this;
 
+						// Doughnut 测试数据
 						this.dataTemp = {
 							progressArr: unit.checkProgressArr(this.panel.progressArr, this.dataTemp.progressArr),
 							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
@@ -136,6 +137,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						};
 						if (series && series.length > 0) {
 							series = unit.checkSeries(this.panel.targets, series);
+							// -----------------------------------------------------------------Progress 数据处理-----------------------------------------------------------------
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								if (series[index] && series[index].datapoints) {
 									var datapoints = series[index].datapoints;
@@ -157,10 +159,10 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 									}
 								}
 							});
-
 							var total = 0,
 							    proLen = this.panel.progressArr.length,
 							    perTotal = 0;
+							// -----------------------------------------------------------------Bar 数据处理-----------------------------------------------------------------
 							for (var i = 0; i < this.dataTemp.barsArr.length; i++) {
 								var indTmp = proLen + i;
 								if (series[indTmp] && series[indTmp].datapoints) {
@@ -191,20 +193,24 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								}
 							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-							this.draw(this.getDoughnutList());
+							this.draw(["#67C23A", "#67C23A", "yellow"], this.getDoughnutList());
+							// this.draw(["grey"], this.getDoughnutList());
 						} else {
+							// -----------------------------------------------------------------Progress 空数据处理-----------------------------------------------------------------
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
 								value.value = 0;
 								value.valueShow = 'N/A';
 								value.percent = 0;
 							});
+							// -----------------------------------------------------------------Bar 空数据处理-----------------------------------------------------------------
 							this.dataTemp.barsArr.forEach(function (value, index, arr) {
 								value.value = 0;
 								value.percent = index == 0 ? 100 : 0;
 								value.valueShow = 'N/A';
 							});
 							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-							this.draw(this.getDoughnutList());
+							this.draw(["#67C23A", "#67C23A", "yellow"], this.getDoughnutList());
+							// this.draw(["grey"], this.getDoughnutList());
 						}
 						return this.dataTemp;
 					}
@@ -259,7 +265,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							}
 						};
 						var objTempEdit = {
-							id: autoID(), label: ''
+							id: autoID(), unit: '', label: '', format: 'short'
 						},
 						    objTemp = { value: 0, valueShow: '', percent: 0 };
 						this.panel.doughnutsArr.push(objTempEdit);
@@ -299,14 +305,16 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					}
 				}, {
 					key: 'draw',
-					value: function draw(domList) {
+					value: function draw(data, domList) {
 						console.log("progresschart.js/draw is run.");
+						// Doughnut 测试数据
 						for (var i in domList) {
 							var dom = domList[i];
 							// dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
 							dom.width = document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[0].id)[0].clientWidth;
 							dom.height = 100;
 							Draw({
+								data: data,
 								dom: dom,
 								width: dom.width,
 								height: dom.height
