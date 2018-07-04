@@ -117,8 +117,8 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				}
 			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-			this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
-			// this.draw(["grey"], this.getDoughnutList());
+			// this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
+			this.draw(["grey"], this.getDoughnutList());
 		} else {
 			// -----------------------------------------------------------------Progress 空数据处理-----------------------------------------------------------------
 			this.dataTemp.progressArr.forEach((value, index, arr) => {
@@ -133,8 +133,23 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				value.valueShow = 'N/A';
 			})
 			// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-			this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
-			// this.draw(["grey"], this.getDoughnutList());
+			let TestData = [[0,1], [3,2]]
+			let dnList = this.getDoughnutList();
+			dnList = dnList.map((item, index) => {
+				let dnData = TestData[index];
+				let data = ["yellow"];
+				for(let i = 0;i<dnData[0];i++) {
+					data.push("red");
+				}
+				for(let i = 0;i<dnData[1];i++) {
+					data.push("#67C23A");
+				}
+				return {
+					dom: item,
+					data: data,
+				}
+			});
+			this.draw(dnList);
 		}
 		return this.dataTemp;
 	}
@@ -223,16 +238,15 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
-	draw(data, domList) {
+	draw(list) {
 		console.log("progresschart.js/draw is run.");
 		// Doughnut 测试数据
-		for(let i in domList) {
-			let dom = domList[i];
-			// dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+		for(let i in list) {
+			let dom = list[i].dom;
 			dom.width = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[0].id)[0].clientWidth;
 			dom.height = 100;
 			Draw({
-				data: data,
+				data: list[i].data,
 				dom: dom,
 				width: dom.width,
 				height: dom.height,
