@@ -57,7 +57,8 @@ let doughnut = (opt)=>{
     radiusInSide = radius * 0.75,
     startAngle = -90,
     step = 360 / Num;
-    let colors = opt.colors.slice(0, opt.data.length);
+    // let colors = opt.colors.slice(0, opt.data.length);
+    let colors = opt.data;
 
     // 绘制饼图
     colors.forEach(function(value, index) {

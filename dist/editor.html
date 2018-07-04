@@ -88,6 +88,11 @@
 					<input type="text" class="gf-form-input max-width-10" ng-model="doughnut.label" ng-change="ctrl.render()">
 				</div>
 			</div>
+			<div class="gf-form">
+				<span class="gf-form-label width-8">Unit</span>
+				<div class="gf-form-dropdown-typeahead width-10" ng-model="doughnut.format" dropdown-typeahead="ctrl.unitFormats" dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem, doughnut)">
+				</div>
+			</div>
 			<hr class="separate-hr" />
 		</div>
 		<div class="add-row-panel-hint">

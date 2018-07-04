@@ -65,7 +65,8 @@ System.register([], function (_export, _context) {
                     radiusInSide = radius * 0.75,
                     startAngle = -90,
                     step = 360 / Num;
-                var colors = opt.colors.slice(0, opt.data.length);
+                // let colors = opt.colors.slice(0, opt.data.length);
+                var colors = opt.data;
 
                 // 绘制饼图
                 colors.forEach(function (value, index) {
