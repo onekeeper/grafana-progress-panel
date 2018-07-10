@@ -16,12 +16,14 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			colorArr: ['#5eb1e4', '#4888e0', '#2adf6e', '#FFB90F', '#FF4500'],
 			progressArr: [],
 			barsArr: [],
+			barsArr2: [],
 			doughnutsArr: [],
 		};
 
 		this.dataTemp = {
 			progressArr: [],
 			barsArr: [],
+			barsArr2: [],
 			doughnutsArr: [],
 		};
 
@@ -59,6 +61,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		this.dataTemp = {
 			progressArr: unit.checkProgressArr(this.panel.progressArr, this.dataTemp.progressArr),
 			barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
+			barsArr2: unit.checkProgressArr(this.panel.barsArr2, this.dataTemp.barsArr2),
 			doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 		};
 		console.log("Doughnut 获取数据 : series",series);
@@ -118,13 +121,44 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 					}
 				}
 			})
+			// -----------------------------------------------------------------Bar2 数据处理-----------------------------------------------------------------
+			let total2 = 0, perTotal2 = 0, barLen = this.panel.barsArr.length;
+			for (var i = 0; i < this.dataTemp.barsArr2.length; i++) {
+				let indTmp = proLen + barLen + i;
+				if (series[indTmp] && series[indTmp].datapoints) {
+					let datapoints = series[indTmp].datapoints;
+					if (datapoints.length > 0) {
+						this.dataTemp.barsArr2[i].value = datapoints[datapoints.length - 1][0];
+						total2 = Math.round(total2) + Math.round(this.dataTemp.barsArr2[i].value);
+						this.dataTemp.barsArr2[i].valueShow = unit.formatValue(this.panel, this.dataTemp.barsArr2[i].value, this.panel.barsArr2[i].format);
+					} else {
+						this.dataTemp.barsArr2[i].value = 0;
+						this.dataTemp.barsArr2[i].valueShow = 'N/A';
+					}
+				} else {
+					total2 = Math.round(total2) + Math.round(this.dataTemp.barsArr2[i].value);
+				}
+			}
+			this.dataTemp.barsArr2.forEach((value, index, arr) => {
+				if (index == arr.length - 1) {
+					value.percent = 100 - perTotal2;
+				} else {
+					if (value.value) {
+						value.percent = (value.value / total2) * 100;
+						value.percent = Math.floor(value.percent);
+						perTotal2 += value.percent;
+					} else {
+						value.percent = 0;
+					}
+				}
+			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-			let barLen = this.panel.barsArr.length;
+			let barLen2 = this.panel.barsArr2.length;
 			if(this.dataTemp.doughnutsArr.length>0){
 				let dnList = this.getDoughnutList();
 				dnList = dnList.map((item, index) => {
 					let data = ["yellow"];
-					let cursor = proLen + barLen + index * 2;
+					let cursor = proLen + barLen + barLen2 + index * 2;
 					let active = series[cursor].datapoints;
 					active = active[active.length - 1][0];
 					let inactive = series[cursor+1].datapoints;
@@ -152,6 +186,12 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			})
 			// -----------------------------------------------------------------Bar 空数据处理-----------------------------------------------------------------
 			this.dataTemp.barsArr.forEach((value, index, arr) => {
+				value.value = 0;
+				value.percent = index == 0 ? 100 : 0;
+				value.valueShow = 'N/A';
+			})
+			// -----------------------------------------------------------------Bar2 空数据处理-----------------------------------------------------------------
+			this.dataTemp.barsArr2.forEach((value, index, arr) => {
 				value.value = 0;
 				value.percent = index == 0 ? 100 : 0;
 				value.valueShow = 'N/A';
@@ -195,6 +235,9 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	getBarStyle(index) {
 		return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
 	}
+	getBarStyle2(index) {
+		return { 'width': this.dataTemp.barsArr2[index].percent + '%', 'background-color': this.panel.colorArr[index] };
+	}
 
 	addProgress() {
 		let objTempEdit = {
@@ -212,6 +255,15 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 		objTemp = { value: 0, valueShow: '', percent: 0 };
 		this.panel.barsArr.push(objTempEdit);
 		this.dataTemp.barsArr.push(objTemp);
+	}
+
+	addBarMember2() {
+		let objTempEdit = {
+			label: '', unit: '', format: 'short'
+		},
+		objTemp = { value: 0, valueShow: '', percent: 0 };
+		this.panel.barsArr2.push(objTempEdit);
+		this.dataTemp.barsArr2.push(objTemp);
 	}
 
 	// -----------------------------------------------------------------Doughnut DOM 添加-----------------------------------------------------------------
@@ -244,6 +296,23 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			total = Math.round(total) + Math.round(value.value);
 		});
 		this.dataTemp.barsArr.forEach((value, index, arr) => {
+			if (total === 0) {
+				value.percent = index == 0 ? 100 : 0;
+			} else {
+				value.percent = (value.value / total) * 100;
+			}
+		});
+		this.render();
+	}
+
+	delBarMember2(index) {
+		this.panel.barsArr2.splice(index, 1);
+		this.dataTemp.barsArr2.splice(index, 1);
+		let total = 0;
+		this.dataTemp.barsArr2.forEach((value, index, arr) => {
+			total = Math.round(total) + Math.round(value.value);
+		});
+		this.dataTemp.barsArr2.forEach((value, index, arr) => {
 			if (total === 0) {
 				value.percent = index == 0 ? 100 : 0;
 			} else {
