@@ -61,6 +61,8 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
 			doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 		};
+		console.log("Doughnut 获取数据 : series",series);
+		console.log("Doughnut 获取数据 : targets",this.panel.targets);
 		if (series && series.length > 0) {
 			series = unit.checkSeries(this.panel.targets, series);
 			// -----------------------------------------------------------------Progress 数据处理-----------------------------------------------------------------
@@ -117,8 +119,30 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				}
 			})
 			// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-			// this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
-			this.draw(["grey"], this.getDoughnutList());
+			let barLen = this.panel.barsArr.length;
+			if(this.dataTemp.doughnutsArr.length>0){
+				let dnList = this.getDoughnutList();
+				dnList = dnList.map((item, index) => {
+					let data = ["yellow"];
+					let cursor = proLen + barLen + index * 2;
+					let active = series[cursor].datapoints;
+					active = active[active.length - 1][0];
+					let inactive = series[cursor+1].datapoints;
+					inactive = inactive[inactive.length - 1][0];
+					console.log("cursor:",cursor,"series:",series,"active",active,"inactive:",inactive);
+					for(let i = inactive;i>0;i--){
+						data.push("#67C23A");
+					}
+					for(let i = active;i>0;i--){
+						data.push("red");
+					}
+					return {
+						dom: item,
+						data: data,
+					}
+				});
+				this.draw(dnList);		
+			}
 		} else {
 			// -----------------------------------------------------------------Progress 空数据处理-----------------------------------------------------------------
 			this.dataTemp.progressArr.forEach((value, index, arr) => {
@@ -133,23 +157,23 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 				value.valueShow = 'N/A';
 			})
 			// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-			let TestData = [[0,1], [3,2]]
-			let dnList = this.getDoughnutList();
-			dnList = dnList.map((item, index) => {
-				let dnData = TestData[index];
-				let data = ["yellow"];
-				for(let i = 0;i<dnData[0];i++) {
-					data.push("red");
-				}
-				for(let i = 0;i<dnData[1];i++) {
-					data.push("#67C23A");
-				}
-				return {
-					dom: item,
-					data: data,
-				}
-			});
-			this.draw(dnList);
+			// let TestData = [[0,1], [3,2]]
+			// let dnList = this.getDoughnutList();
+			// dnList = dnList.map((item, index) => {
+			// 	let dnData = TestData[index];
+			// 	let data = ["yellow"];
+			// 	for(let i = 0;i<dnData[0];i++) {
+			// 		data.push("red");
+			// 	}
+			// 	for(let i = 0;i<dnData[1];i++) {
+			// 		data.push("#67C23A");
+			// 	}
+			// 	return {
+			// 		dom: item,
+			// 		data: data,
+			// 	}
+			// });
+			// this.draw(dnList);
 		}
 		return this.dataTemp;
 	}
