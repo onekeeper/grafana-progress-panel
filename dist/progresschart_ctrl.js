@@ -135,6 +135,8 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
 							doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 						};
+						console.log("Doughnut 获取数据 : series", series);
+						console.log("Doughnut 获取数据 : targets", this.panel.targets);
 						if (series && series.length > 0) {
 							series = unit.checkSeries(this.panel.targets, series);
 							// -----------------------------------------------------------------Progress 数据处理-----------------------------------------------------------------
@@ -157,6 +159,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 										value.valueShow = 'N/A';
 										value.percent = 0;
 									}
+									console.log("progress: value", value);
 								}
 							});
 							var total = 0,
@@ -193,8 +196,63 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								}
 							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-							this.draw(["#67C23A", "#67C23A", "yellow"], this.getDoughnutList());
+							// this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
 							// this.draw(["grey"], this.getDoughnutList());
+							var barLen = this.panel.barsArr.length;
+							if (this.dataTemp.doughnutsArr.length > 0) {
+								var dnList = this.getDoughnutList();
+								dnList = dnList.map(function (item, index) {
+									var data = ["yellow"];
+									var cursor = proLen + barLen + index * 2;
+									var active = series[cursor].datapoints;
+									active = active[active.length - 1][0];
+									var inactive = series[cursor + 1].datapoints;
+									inactive = inactive[inactive.length - 1][0];
+									console.log("cursor:", cursor, "series:", series, "active", active, "inactive:", inactive);
+									for (var _i = inactive; _i > 0; _i--) {
+										data.push("#67C23A");
+									}
+									for (var _i2 = active; _i2 > 0; _i2--) {
+										data.push("red");
+									}
+									return {
+										dom: item,
+										data: data
+									};
+								});
+								console.log("dnList:", dnList);
+								this.draw(dnList);
+								// for(let i = 0; i<this.doughnutsArr.length;i++) {
+								// 	let data = ["yellow"];
+								// 	let cursor = proLen + barLen + i * 2;
+								// 	let active = series[cursor].datapoints;
+								// 	active = active[active.length - 1][0];
+								// 	let inactive = series[cursor].datapoints;
+								// 	inactive = inactive[inactive.length - 1][0];
+								// 	for(let j in inactive){
+								// 		data.push("#67C23A");
+								// 	}
+								// 	for(let j in active){
+								// 		data.push("red");
+								// 	}
+								// }
+								// let TestData = [[0,1], [3,2]]
+								// let dnList = this.getDoughnutList();
+								// dnList = dnList.map((item, index) => {
+								// 	let dnData = TestData[index];
+								// 	let data = ["yellow"];
+								// 	for(let i = 0;i<dnData[0];i++) {
+								// 		data.push("red");
+								// 	}
+								// 	for(let i = 0;i<dnData[1];i++) {
+								// 		data.push("#67C23A");
+								// 	}
+								// 	return {
+								// 		dom: item,
+								// 		data: data,
+								// 	}
+								// });
+							}
 						} else {
 							// -----------------------------------------------------------------Progress 空数据处理-----------------------------------------------------------------
 							this.dataTemp.progressArr.forEach(function (value, index, arr) {
@@ -209,8 +267,23 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 								value.valueShow = 'N/A';
 							});
 							// -----------------------------------------------------------------Doughnut 空数据处理-----------------------------------------------------------------
-							this.draw(["#67C23A", "#67C23A", "yellow"], this.getDoughnutList());
-							// this.draw(["grey"], this.getDoughnutList());
+							// let TestData = [[0,1], [3,2]]
+							// let dnList = this.getDoughnutList();
+							// dnList = dnList.map((item, index) => {
+							// 	let dnData = TestData[index];
+							// 	let data = ["yellow"];
+							// 	for(let i = 0;i<dnData[0];i++) {
+							// 		data.push("red");
+							// 	}
+							// 	for(let i = 0;i<dnData[1];i++) {
+							// 		data.push("#67C23A");
+							// 	}
+							// 	return {
+							// 		dom: item,
+							// 		data: data,
+							// 	}
+							// });
+							// this.draw(dnList);
 						}
 						return this.dataTemp;
 					}
@@ -305,16 +378,15 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					}
 				}, {
 					key: 'draw',
-					value: function draw(data, domList) {
+					value: function draw(list) {
 						console.log("progresschart.js/draw is run.");
 						// Doughnut 测试数据
-						for (var i in domList) {
-							var dom = domList[i];
-							// dom.width = document.querySelectorAll(".doughnuts-contanier")[0].clientWidth / domList.length;
+						for (var i in list) {
+							var dom = list[i].dom;
 							dom.width = document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[0].id)[0].clientWidth;
 							dom.height = 100;
 							Draw({
-								data: data,
+								data: list[i].data,
 								dom: dom,
 								width: dom.width,
 								height: dom.height
