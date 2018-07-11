@@ -81,12 +81,14 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						colorArr: ['#5eb1e4', '#4888e0', '#2adf6e', '#FFB90F', '#FF4500'],
 						progressArr: [],
 						barsArr: [],
+						barsArr2: [],
 						doughnutsArr: []
 					};
 
 					_this.dataTemp = {
 						progressArr: [],
 						barsArr: [],
+						barsArr2: [],
 						doughnutsArr: []
 					};
 
@@ -133,6 +135,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						this.dataTemp = {
 							progressArr: unit.checkProgressArr(this.panel.progressArr, this.dataTemp.progressArr),
 							barsArr: unit.checkProgressArr(this.panel.barsArr, this.dataTemp.barsArr),
+							barsArr2: unit.checkProgressArr(this.panel.barsArr2, this.dataTemp.barsArr2),
 							doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 						};
 						console.log("Doughnut 获取数据 : series", series);
@@ -153,13 +156,22 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 										if (perValue < 0) {
 											perValue = 0;
 										}
+										// RAC视图 SQL提交 Log Buffer Hit特殊处理
+										if (series[index].target == "Log buffer space waits") {
+											if (perValue == 0) {
+												perValue = 100;
+												value.valueShow = '100%';
+											} else {
+												perValue = 90;
+												value.valueShow = '90%';
+											}
+										}
 										value.percent = perValue;
 									} else {
 										value.value = 0;
 										value.valueShow = 'N/A';
 										value.percent = 0;
 									}
-									console.log("progress: value", value);
 								}
 							});
 							var total = 0,
@@ -195,15 +207,46 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 									}
 								}
 							});
+							// -----------------------------------------------------------------Bar2 数据处理-----------------------------------------------------------------
+							var total2 = 0,
+							    perTotal2 = 0,
+							    barLen = this.panel.barsArr.length;
+							for (var i = 0; i < this.dataTemp.barsArr2.length; i++) {
+								var _indTmp = proLen + barLen + i;
+								if (series[_indTmp] && series[_indTmp].datapoints) {
+									var _datapoints = series[_indTmp].datapoints;
+									if (_datapoints.length > 0) {
+										this.dataTemp.barsArr2[i].value = _datapoints[_datapoints.length - 1][0];
+										total2 = Math.round(total2) + Math.round(this.dataTemp.barsArr2[i].value);
+										this.dataTemp.barsArr2[i].valueShow = unit.formatValue(this.panel, this.dataTemp.barsArr2[i].value, this.panel.barsArr2[i].format);
+									} else {
+										this.dataTemp.barsArr2[i].value = 0;
+										this.dataTemp.barsArr2[i].valueShow = 'N/A';
+									}
+								} else {
+									total2 = Math.round(total2) + Math.round(this.dataTemp.barsArr2[i].value);
+								}
+							}
+							this.dataTemp.barsArr2.forEach(function (value, index, arr) {
+								if (index == arr.length - 1) {
+									value.percent = 100 - perTotal2;
+								} else {
+									if (value.value) {
+										value.percent = value.value / total2 * 100;
+										value.percent = Math.floor(value.percent);
+										perTotal2 += value.percent;
+									} else {
+										value.percent = 0;
+									}
+								}
+							});
 							// -----------------------------------------------------------------Doughnut 数据处理-----------------------------------------------------------------
-							// this.draw(["#67C23A", "#67C23A", "yellow"] ,this.getDoughnutList());
-							// this.draw(["grey"], this.getDoughnutList());
-							var barLen = this.panel.barsArr.length;
+							var barLen2 = this.panel.barsArr2.length;
 							if (this.dataTemp.doughnutsArr.length > 0) {
 								var dnList = this.getDoughnutList();
 								dnList = dnList.map(function (item, index) {
 									var data = ["yellow"];
-									var cursor = proLen + barLen + index * 2;
+									var cursor = proLen + barLen + barLen2 + index * 2;
 									var active = series[cursor].datapoints;
 									active = active[active.length - 1][0];
 									var inactive = series[cursor + 1].datapoints;
@@ -220,38 +263,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 										data: data
 									};
 								});
-								console.log("dnList:", dnList);
 								this.draw(dnList);
-								// for(let i = 0; i<this.doughnutsArr.length;i++) {
-								// 	let data = ["yellow"];
-								// 	let cursor = proLen + barLen + i * 2;
-								// 	let active = series[cursor].datapoints;
-								// 	active = active[active.length - 1][0];
-								// 	let inactive = series[cursor].datapoints;
-								// 	inactive = inactive[inactive.length - 1][0];
-								// 	for(let j in inactive){
-								// 		data.push("#67C23A");
-								// 	}
-								// 	for(let j in active){
-								// 		data.push("red");
-								// 	}
-								// }
-								// let TestData = [[0,1], [3,2]]
-								// let dnList = this.getDoughnutList();
-								// dnList = dnList.map((item, index) => {
-								// 	let dnData = TestData[index];
-								// 	let data = ["yellow"];
-								// 	for(let i = 0;i<dnData[0];i++) {
-								// 		data.push("red");
-								// 	}
-								// 	for(let i = 0;i<dnData[1];i++) {
-								// 		data.push("#67C23A");
-								// 	}
-								// 	return {
-								// 		dom: item,
-								// 		data: data,
-								// 	}
-								// });
 							}
 						} else {
 							// -----------------------------------------------------------------Progress 空数据处理-----------------------------------------------------------------
@@ -262,6 +274,12 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							});
 							// -----------------------------------------------------------------Bar 空数据处理-----------------------------------------------------------------
 							this.dataTemp.barsArr.forEach(function (value, index, arr) {
+								value.value = 0;
+								value.percent = index == 0 ? 100 : 0;
+								value.valueShow = 'N/A';
+							});
+							// -----------------------------------------------------------------Bar2 空数据处理-----------------------------------------------------------------
+							this.dataTemp.barsArr2.forEach(function (value, index, arr) {
 								value.value = 0;
 								value.percent = index == 0 ? 100 : 0;
 								value.valueShow = 'N/A';
@@ -310,6 +328,11 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						return { 'width': this.dataTemp.barsArr[index].percent + '%', 'background-color': this.panel.colorArr[index] };
 					}
 				}, {
+					key: 'getBarStyle2',
+					value: function getBarStyle2(index) {
+						return { 'width': this.dataTemp.barsArr2[index].percent + '%', 'background-color': this.panel.colorArr[index] };
+					}
+				}, {
 					key: 'addProgress',
 					value: function addProgress() {
 						var objTempEdit = {
@@ -328,6 +351,16 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 						    objTemp = { value: 0, valueShow: '', percent: 0 };
 						this.panel.barsArr.push(objTempEdit);
 						this.dataTemp.barsArr.push(objTemp);
+					}
+				}, {
+					key: 'addBarMember2',
+					value: function addBarMember2() {
+						var objTempEdit = {
+							label: '', unit: '', format: 'short'
+						},
+						    objTemp = { value: 0, valueShow: '', percent: 0 };
+						this.panel.barsArr2.push(objTempEdit);
+						this.dataTemp.barsArr2.push(objTemp);
 					}
 				}, {
 					key: 'addDoughnutMember',
@@ -361,6 +394,24 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							total = Math.round(total) + Math.round(value.value);
 						});
 						this.dataTemp.barsArr.forEach(function (value, index, arr) {
+							if (total === 0) {
+								value.percent = index == 0 ? 100 : 0;
+							} else {
+								value.percent = value.value / total * 100;
+							}
+						});
+						this.render();
+					}
+				}, {
+					key: 'delBarMember2',
+					value: function delBarMember2(index) {
+						this.panel.barsArr2.splice(index, 1);
+						this.dataTemp.barsArr2.splice(index, 1);
+						var total = 0;
+						this.dataTemp.barsArr2.forEach(function (value, index, arr) {
+							total = Math.round(total) + Math.round(value.value);
+						});
+						this.dataTemp.barsArr2.forEach(function (value, index, arr) {
 							if (total === 0) {
 								value.percent = index == 0 ? 100 : 0;
 							} else {
