@@ -82,6 +82,17 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 						if (perValue < 0) {
 							perValue = 0;
 						}
+						// RAC视图 SQL提交 Log Buffer Hit特殊处理
+						if(series[index].target == "Log buffer space waits") {
+							if(perValue == 0) {
+								perValue = 100;
+								value.valueShow = '100%';
+							}
+							else {
+								perValue = 90;
+								value.valueShow = '90%';
+							}
+						}
 						value.percent = perValue;
 					} else {
 						value.value = 0;
