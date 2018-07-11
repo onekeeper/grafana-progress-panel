@@ -1,6 +1,7 @@
 <div class="progress-panel small" ng-style="{height: ctrl.height}">
     <div class="row">
 		<table class="custom-progress">
+<!------------------------------------------------ Progress ------------------------------------------------>			
 			<tr ng-repeat="progress in ctrl.panel.progressArr track by $index" ng-if="progress.label">
 				<td class="text-left label-td" ng-bind="progress.label" title="{{progress.label}}"></td>
 				<td class="chart-td">
@@ -17,14 +18,15 @@
 				<td class="value-td" title="{{progress.valueShow}}">{{progress.valueShow}}</td>
 				-->
 			</tr>
+<!------------------------------------------------ Bar ------------------------------------------------>			
 			<tr ng-if="ctrl.panel.barsArr.length > 0">
-				<td colspan="3" class="bar-td">
+				<td colspan="3" class="bar-td" ng-if="ctrl.panel.barsArr.length > 0">
 					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && ctrl.dataTemp.barsArr[$index].percent>0" class="bar-div" 
 					ng-style="ctrl.getBarStyle($index)" title="{{bar.label}}">				
 					    {{ctrl.dataTemp.barsArr[$index].valueShow}}
 					</div>	
 					<div style="clear:both"></div>
-					<div class="bar-shade"></div>
+					<!-- <div class="bar-shade"></div> -->
                     <!--					
 					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && bar.percent>0" class="bar-div-staff" style="width:{{bar.percent}}%;color:{{ctrl.panel.colorArr[$index]}}">				
 						<div class="triangle-up" style="border-bottom-color:{{ctrl.panel.colorArr[$index]}}"></div>
@@ -33,7 +35,43 @@
 					-->					
 				</td>
 			</tr>
+			<tr ng-if="ctrl.panel.barsArr2.length > 0">
+				<td colspan="3" class="bar-td" ng-if="ctrl.panel.barsArr2.length > 0">
+					<div ng-repeat="bar in ctrl.panel.barsArr2 track by $index" ng-if="bar.label && ctrl.dataTemp.barsArr2[$index].percent>0" class="bar-div" 
+					ng-style="ctrl.getBarStyle2($index)" title="{{bar.label}}">				
+						{{ctrl.dataTemp.barsArr[$index].valueShow}}
+					</div>	
+					<div style="clear:both"></div>
+					<!-- <div class="bar-shade"></div> -->
+					<!--					
+					<div ng-repeat="bar in ctrl.panel.barsArr track by $index" ng-if="bar.label && bar.percent>0" class="bar-div-staff" style="width:{{bar.percent}}%;color:{{ctrl.panel.colorArr[$index]}}">				
+						<div class="triangle-up" style="border-bottom-color:{{ctrl.panel.colorArr[$index]}}"></div>
+						<h5>{{bar.label}}</h5>
+					</div>
+					-->					
+				</td>
+			</tr>
 		</table>
+		<!------------------------------------------------ Doughnuts Charts ------------------------------------------------>
+		<div ng-if="ctrl.panel.doughnutsArr.length > 0" class="doughnuts-contanier">
+			<!-- 循环渲染，宽度平分，高度固定 -->
+			<div 
+				ng-repeat="doughnut in ctrl.panel.doughnutsArr track by $index" 
+				ng-if="doughnut.label" 
+				class="doughnut-contanier"
+				ng-style="{
+					width: 1 / ctrl.panel.doughnutsArr.length * 100 + '%',
+					height: 100,
+					padding: 0,
+					margin: 0,
+				}"
+				title="{{doughnut.label}}"
+				id="{{'doughnut_'+ctrl.panel.doughnutsArr[$index].id}}"
+			>
+				<span class="doughnut-label">{{doughnut.label}}</span>
+				<canvas ng-init="ctrl.doughnutInit($index, doughnut.id, this)"></canvas>
+			</div>
+		</div>
 	</div>
 </div>
 
