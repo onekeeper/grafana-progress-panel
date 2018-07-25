@@ -64,8 +64,8 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			barsArr2: unit.checkProgressArr(this.panel.barsArr2, this.dataTemp.barsArr2),
 			doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 		};
-		console.log("Doughnut 获取数据 : series",series);
-		console.log("Doughnut 获取数据 : targets",this.panel.targets);
+		// console.log("Doughnut 获取数据 : series",series);
+		// console.log("Doughnut 获取数据 : targets",this.panel.targets);
 		if (series && series.length > 0) {
 			series = unit.checkSeries(this.panel.targets, series);
 			// -----------------------------------------------------------------Progress 数据处理-----------------------------------------------------------------
@@ -174,7 +174,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 					active = active[active.length - 1][0];
 					let inactive = series[cursor+1].datapoints;
 					inactive = inactive[inactive.length - 1][0];
-					console.log("cursor:",cursor,"series:",series,"active",active,"inactive:",inactive);
+					// console.log("cursor:",cursor,"series:",series,"active",active,"inactive:",inactive);
 					for(let i = inactive;i>0;i--){
 						data.push("#67C23A");
 					}
@@ -343,12 +343,14 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 
 	// -----------------------------------------------------------------Doughnut DOM 绘画-----------------------------------------------------------------
 	draw(list) {
-		console.log("progresschart.js/draw is run.");
+		// console.log("progresschart.js/draw is run.");
 		// Doughnut 测试数据
 		for(let i in list) {
 			let dom = list[i].dom;
-			dom.width = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[0].id)[0].clientWidth;
-			dom.height = 100;
+			dom.style.width = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[0].id)[0].clientWidth+"px";
+			dom.style.height = '100px';
+			dom.width = window.devicePixelRatio * document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[0].id)[0].clientWidth;
+			dom.height = window.devicePixelRatio * 100;
 			Draw({
 				data: list[i].data,
 				dom: dom,
@@ -366,7 +368,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 			// 	domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
 			// }
 			let target = document.querySelectorAll("#doughnut_"+this.panel.doughnutsArr[i].id)[0];
-			console.log("target:",target);
+			// console.log("target:",target);
 			if(target) {
 				domList.push(target.children[1]);
 			}
@@ -375,7 +377,7 @@ export class ProgressChartCtrl extends MetricsPanelCtrl {
 	}
 	// ---------------------------------------------圆环图初始化----------------------------------------------------------------------------------------------------------
 	doughnutInit(index, id, $event) {
-		console.log(index, id, $event);
+		// console.log(index, id, $event);
 		// this.render();
 		// let arr = [];
 		// if(index == (len - 1)){

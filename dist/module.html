@@ -39,7 +39,7 @@
 				<td colspan="3" class="bar-td" ng-if="ctrl.panel.barsArr2.length > 0">
 					<div ng-repeat="bar in ctrl.panel.barsArr2 track by $index" ng-if="bar.label && ctrl.dataTemp.barsArr2[$index].percent>0" class="bar-div" 
 					ng-style="ctrl.getBarStyle2($index)" title="{{bar.label}}">				
-						{{ctrl.dataTemp.barsArr[$index].valueShow}}
+						{{ctrl.dataTemp.barsArr2[$index].valueShow}}
 					</div>	
 					<div style="clear:both"></div>
 					<!-- <div class="bar-shade"></div> -->
