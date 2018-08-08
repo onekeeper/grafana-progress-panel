@@ -50,8 +50,8 @@ System.register([], function (_export, _context) {
             };
 
             doughnut = function doughnut(opt) {
-                console.log("draw.js/doughnut is run.");
-                console.log("opt", opt);
+                // console.log("draw.js/doughnut is run.");
+                // console.log("opt",opt);
                 var drawSize = opt.width <= opt.height ? opt.width : opt.height;
                 var Num = opt.data.length;
                 var cv = opt.dom;

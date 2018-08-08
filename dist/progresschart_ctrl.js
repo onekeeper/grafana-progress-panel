@@ -138,8 +138,8 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							barsArr2: unit.checkProgressArr(this.panel.barsArr2, this.dataTemp.barsArr2),
 							doughnutsArr: unit.checkProgressArr(this.panel.doughnutsArr, this.dataTemp.doughnutsArr)
 						};
-						console.log("Doughnut 获取数据 : series", series);
-						console.log("Doughnut 获取数据 : targets", this.panel.targets);
+						// console.log("Doughnut 获取数据 : series",series);
+						// console.log("Doughnut 获取数据 : targets",this.panel.targets);
 						if (series && series.length > 0) {
 							series = unit.checkSeries(this.panel.targets, series);
 							// -----------------------------------------------------------------Progress 数据处理-----------------------------------------------------------------
@@ -251,7 +251,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 									active = active[active.length - 1][0];
 									var inactive = series[cursor + 1].datapoints;
 									inactive = inactive[inactive.length - 1][0];
-									console.log("cursor:", cursor, "series:", series, "active", active, "inactive:", inactive);
+									// console.log("cursor:",cursor,"series:",series,"active",active,"inactive:",inactive);
 									for (var _i = inactive; _i > 0; _i--) {
 										data.push("#67C23A");
 									}
@@ -430,12 +430,14 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 				}, {
 					key: 'draw',
 					value: function draw(list) {
-						console.log("progresschart.js/draw is run.");
+						// console.log("progresschart.js/draw is run.");
 						// Doughnut 测试数据
 						for (var i in list) {
 							var dom = list[i].dom;
-							dom.width = document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[0].id)[0].clientWidth;
-							dom.height = 100;
+							dom.style.width = document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[0].id)[0].clientWidth + "px";
+							dom.style.height = '100px';
+							dom.width = window.devicePixelRatio * document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[0].id)[0].clientWidth;
+							dom.height = window.devicePixelRatio * 100;
 							Draw({
 								data: list[i].data,
 								dom: dom,
@@ -453,7 +455,7 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 							// 	domList.push(document.querySelectorAll(".doughnut-contanier")[i].children[1]);
 							// }
 							var target = document.querySelectorAll("#doughnut_" + this.panel.doughnutsArr[i].id)[0];
-							console.log("target:", target);
+							// console.log("target:",target);
 							if (target) {
 								domList.push(target.children[1]);
 							}
@@ -462,15 +464,17 @@ System.register(['app/plugins/sdk', './draw', 'lodash', './unit', 'app/core/util
 					}
 				}, {
 					key: 'doughnutInit',
-					value: function doughnutInit(index, id, $event) {
-						console.log(index, id, $event);
-						// this.render();
-						// let arr = [];
-						// if(index == (len - 1)){
-						// 	arr = this.getDoughnutList();
-						// 	this.draw(arr);
-						// }
-					}
+					value: function doughnutInit(index, id, $event) {}
+					// console.log(index, id, $event);
+					// this.render();
+					// let arr = [];
+					// if(index == (len - 1)){
+					// 	arr = this.getDoughnutList();
+					// 	this.draw(arr);
+					// }
+
+					// -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 				}, {
 					key: 'link',
 					value: function link(scope, elem) {

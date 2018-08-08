@@ -43,8 +43,8 @@ let calLineTo = (a, r)=>{
     return {x:x, y:y}
 }
 let doughnut = (opt)=>{
-    console.log("draw.js/doughnut is run.");
-    console.log("opt",opt);
+    // console.log("draw.js/doughnut is run.");
+    // console.log("opt",opt);
     let drawSize = (opt.width <= opt.height ? opt.width : opt.height);
     let Num = opt.data.length;
     let cv = opt.dom;
