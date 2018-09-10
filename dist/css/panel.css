@@ -1,11 +1,11 @@
 .progress-panel {
 	text-align:center;
     min-height: 8rem;
-    display: flex;
-    padding-top: 2.6rem;
-    padding-bottom: 2rem;
-    flex-direction: column;
-    justify-content: center;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
 }
 
 .custom-progress{
@@ -69,7 +69,7 @@
 
 .bar-div{
 	float:left;
-	height:30px;
+	height:24px;
 	text-align: right;
     /*padding-right: 5px;*/
 	color:#fff;
@@ -125,4 +125,38 @@
 
 .separate-hr{
 	height:1px;border:none;border-top:1px dashed #ccc;margin-top:8px;margin-bottom:8px;
+}
+
+/* ---------------------------------------------doughnutChart Style--------------------------------------------- */
+.doughnuts-contanier {
+	width: 90%;
+	padding: 0;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	box-sizing: border-box;
+}
+.doughnut-contanier {
+	/* background-color: skyblue; */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	position: relative;
+}
+.doughnut-label {
+	position: absolute;
+	width: 100%;
+	line-height: 100px;
+	top: 0;
+	left: 0;
+}
+.doughnut-contanier canvas {
+	max-width: 100%;
+	max-height: 100%;
 }
